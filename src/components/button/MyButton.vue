@@ -1,22 +1,19 @@
 <script setup>
 const props = defineProps({
-    'btnType': {
-      type: String,
-      default:'button'
-    }, // 'button', 'submit', reset
-    'size' : String, // 'big', 'middle', 'small'
-    'color' : String, // 'black', 'white', 'gray'
-    'content' : String,
-  });
-
+  btnType: {
+    type: String,
+    default: "button",
+  }, // 'button', 'submit', reset
+  size: String, // 'big', 'middle', 'small'
+  color: String, // 'black', 'white', 'gray'
+  content: String,
+});
 </script>
 
 <template>
-  <button
-   :type="props.btnType" 
-  :class="[props.color, props.size]"
-  >{{props.content}}</button>
-
+  <button :type="props.btnType" :class="[props.color, props.size]">
+    {{ props.content }}
+  </button>
 </template>
 
 <style scoped>
@@ -33,7 +30,6 @@ button {
   width: 350px;
   height: 45px;
   font-size: 20px;
-
 }
 .middle {
   width: 300px;
@@ -47,22 +43,27 @@ button {
   font-size: 20px;
 }
 
-.black{
+.black {
   background-color: var(--personal-color-black);
   color: var(--personal-color-white);
 }
-.gray{
+.gray {
   background-color: var(--personal-color-gray);
   color: var(--personal-color-white);
 }
-.white{
+.white {
   background-color: var(--personal-color-white);
   color: var(--personal-color-black);
 }
-.pink{
-   background-color: var(--personal-color-pink);
-  color: var(--personal-color-white);
+.pink {
+  background-color: #f8b9de;
+  color: #fcf7f9;
+  border: 2px solid #daced3;
 }
 
+.lavender {
+  background-color: #eeb7ce;
+  border: 2px solid #daced3;
+  color: #fcf7f9;
+}
 </style>
-

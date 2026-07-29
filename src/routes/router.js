@@ -4,6 +4,7 @@ import PostIndex from "../page/posts/PostIndex.vue";
 import Login from "../page/auth/Login.vue";
 import { useAuthStore } from "../store/auth/useAuthStore.js";
 import PostShow from "../page/posts/PostShow.vue";
+import { usePostStatisticsStore } from "../store/post/usePostStatisticsStore.js";
 import Registration from "../page/auth/Registration.vue";
 import PostWrite from "../page/posts/PostWrite.vue";
 
@@ -19,6 +20,14 @@ const routes = [
     path: "/",
     redirect: "/posts",
     meta: setMeta(false, false),
+  },
+  {
+    path: "/posts/:id",
+    component: PostShow,
+    meta: {
+      isAuthenticated: true,
+      isGuestOnly: false,
+    },
   },
 
   //인증관련
@@ -67,14 +76,21 @@ const router = createRouter({
 });
 
 // 네비게이션 가드
-router.beforeEach(async (to, form, next) => {
+router.beforeEach(async (to, from, next) => {
   // authStore
   const authStore = useAuthStore();
+  const postStatisticsStore = usePostStatisticsStore();
+
   // accessToken 엑세스토큰(인증)이 없을 때 && 리이슈 첫 시도시 토큰 재발급 시도
   if (!authStore.isLoggedIn && !authStore.isReissued) {
     try {
       await authStore.reissue();
+      // 로그인이 최종적으로 확인된 경우에만 게시글 개수 조회
+      if (authStore.isLoggedIn) {
+        postStatisticsStore.getUserPostCount();
+      }
     } catch (error) {
+      //리프래시 토큰 만료 등 복구 실패시 예외처리
       // alert('로그인 기간이 만료되었습니다.\n다시 로그인 해 주십시오.');
       // return next('/login');
     }

@@ -1,64 +1,88 @@
 <script setup>
-import { reactive, ref } from 'vue';
-import { usePostWriteStore } from '../../store/post/usePostWriteStore';
-import { useFileStore } from '../../store/file/useFileStore';
-import { useAuthStore } from '../../store/auth/useAuthStore';
-import { useRouter } from 'vue-router';
-const postdata = reactive({
-  content:'',
-  image:''
-})
-const postPreview = ref('');
+import { reactive, ref, watch } from "vue";
+import MyButton from "../../components/button/MyButton.vue";
+import MyInput from "../../components/input/MyInput.vue";
+import { useFileStore } from "../../store/file/useFileStore.js";
+import { useRouter } from "vue-router";
+import { usePostWriteStore } from "../../store/post/usePostWriteStore.js";
+import { usePostStatisticsStore } from "../../store/post/usePostStatisticsStore.js";
+
+const router = useRouter();
 const fileStore = useFileStore();
 const postWriteStore = usePostWriteStore();
-const authStore = useAuthStore();
-const router = useRouter();
+const postStatisticsStore = usePostStatisticsStore();
 
-const handleChangePostImage = async (e) => {
-  const file = e.target.files[0];
-  
-  if(!file) {
-    return;
-  }
-    const fileUri = await fileStore.uploadProfile(file);
-    if(!fileUri){return;}
-    
-    postdata.image = fileUri;
-    postPreview =  URL.createObjectURL(file);
-    } 
+const preview = ref(null);
+const selectedFile = ref(null);
 
-const submit = async ()=>{
+const postData = reactive({
+  content: "",
+  image: "",
+});
+
+const handleSubmit = async () => {
   try {
-    await  postWriteStore.writePost(postdata);
+    // 제출 시점에 파일 업로드 실행
+    postData.image = await fileStore.uploadPost(selectedFile.value);
+    if (!postData.image) {
+      alert("파일 업로드 실패");
+      return;
+    }
+
+    const result = await postWriteStore.writePost(postData);
+    postStatisticsStore.increasePostCount();
+    router.replace(`/posts/${result.id}`);
   } catch (error) {
-    console.error(error);
+    alert("게시글 생성 실패");
   }
-}
-  
+};
+// 파일 변경 감시자 (미리보기 및 선행 업로드 처리)
+watch(selectedFile, async () => {
+  if (selectedFile.value) {
+    if (preview.value) {
+      URL.revokeObjectURL(preview.value);
+    }
 
-
+    // 파일 객체를 브라우저에서 접근 가능한 임시 URL로 변환
+    preview.value = URL.createObjectURL(selectedFile.value);
+  }
+});
 </script>
 
 <template>
-  <div class="write-container">
-    <div class="image-section">
-      <input type="file" @change="handleChangePostImage" />
-      <div class="preview-box" v-if="postPreview">
-        <div class="preview" v-if="postPreview" :style="{ backgroundImage: `url(${postPreview})` }"></div>
-        
-      </div>
-    </div>
+  <form @submit.prevent="handleSubmit">
+    <MyInput
+      mode="textarea"
+      :placeholder="'내용을 입력하세요'"
+      :readonly="false"
+      :required="true"
+      v-model="postData.content"
+    />
 
-    <div class="content-section">
-      <textarea v-model="content" class="content-textarea" placeholder="내용을 입력하세요"></textarea>
-    </div>
+    <MyInput
+      mode="file"
+      accept="image/*"
+      :required="true"
+      v-model="selectedFile"
+    />
+    <div
+      class="preview"
+      v-if="preview"
+      :style="{ backgroundImage: `url(${preview})` }"
+    ></div>
 
-    <button class="save-btn" @click="submit">저장</button>
-  </div>
+    <MyButton
+      :btn-type="'submit'"
+      :content="'저장'"
+      :color="'gray'"
+      :size="'middle'"
+    ></MyButton>
+  </form>
 </template>
 
 <style scoped>
-.write-container {
+form {
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -66,43 +90,14 @@ const submit = async ()=>{
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
-  padding: 20px;
 }
 
-.image-section,
-.content-section {
+.preview {
   width: 100%;
-}
-
-.preview-box {
-  width: 150px;
-  height: 150px;
-  display: flex;
-  flex-direction: column-reverse;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  overflow: hidden;
-  margin-top: 10px;
-}
-
-
-.content-textarea {
-  width: 100%;
-  height: 200px;
-  padding: 15px;
-  box-sizing: border-box;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  resize: none;
-}
-
-.save-btn {
-  width: 100%;
-  padding: 12px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+  padding-top: 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  border-radius: 10px;
 }
 </style>

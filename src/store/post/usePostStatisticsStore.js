@@ -9,6 +9,14 @@ export const usePostStatisticsStore = defineStore("postStatisticsStore", () => {
   // 2. Getter
 
   // 3. Actions
+  const decrementPostCount = () => {
+    postCount.value--;
+  };
+
+  const increasePostCount = () => {
+    postCount.value++;
+  };
+
   const getUserPostCount = async () => {
     try {
       const url = `/api/posts/statistics/user-post-count`;
@@ -23,6 +31,8 @@ export const usePostStatisticsStore = defineStore("postStatisticsStore", () => {
   };
   return {
     postCount,
+    decrementPostCount,
     getUserPostCount,
+    increasePostCount,
   };
 });

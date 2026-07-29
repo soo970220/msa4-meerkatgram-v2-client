@@ -1,73 +1,69 @@
 <script setup>
-import { ref } from 'vue';
-import MyButton from './buttons/MyButton.vue';
-import { useRouter } from 'vue-router';
-import { useAuthStore } from '../store/auth/useAuthStore.js';
-
+import { ref } from "vue";
+import MyButton from "./button/MyButton.vue";
+import { useRouter } from "vue-router";
+import { useAuthStore } from "../store/auth/useAuthStore.js";
 
 const router = useRouter();
 const authStore = useAuthStore();
 
 const redirectMain = () => {
-  router.push('/')
-}
+  router.push("/");
+};
 
 const redirectLogin = () => {
-  router.push('/login')
-}
+  router.push("/login");
+};
 
 const redirectRegistration = () => {
-  router.push('/registration')
-}
+  router.push("/registration");
+};
 
 const logout = async () => {
   await authStore.logout();
-  router.replace('/');
-  
-}
-
+  router.replace("/");
+};
 </script>
 
 <template>
   <div class="header">
     <div class="title-box">
-      <h1 class="title" @click="redirectMain()"> Meerkatgram</h1>
+      <h1 class="title" @click="redirectMain()">Meerkatgram</h1>
     </div>
 
     <div class="btn-box">
       <MyButton
-       @click="redirectLogin()"    
+        @click="redirectLogin()"
         v-if="!authStore.isLoggedIn"
-       :content="'Sign In'"
-       :color="'gray'"
-       :size="'small'"
-       />
+        :content="'Log In'"
+        :color="'pink'"
+        :size="'small'"
+      />
       <MyButton
-       v-if="!authStore.isLoggedIn"
-       :content="'Sign Up'"
-       :color="'yellow'"
-       :size="'small'"
-       @click="redirectRegistration" />
+        v-if="!authStore.isLoggedIn"
+        :content="'Sign Up'"
+        :color="'lavender'"
+        :size="'small'"
+        @click="redirectRegistration"
+      />
 
-
-        <MyButton
-       v-if ="authStore.isLoggedIn"
-       :content="'Logout'"
-       :color="'pink'"
-       :size="'small'"
-       @click="logout"/>
-       
+      <MyButton
+        v-if="authStore.isLoggedIn"
+        :content="'Logout'"
+        :color="'pink'"
+        :size="'small'"
+        @click="logout"
+      />
     </div>
   </div>
-  <hr>
+  <hr />
 </template>
 
 <style scoped>
-.header{
+.header {
   padding: 10px;
   display: flex;
   justify-content: space-between;
-
 }
 
 .title-box {
@@ -75,14 +71,13 @@ const logout = async () => {
   align-items: center;
 }
 
-.title{
+.title {
   font-size: 20px;
+  cursor: pointer;
 }
 
-.btn-box{
+.btn-box {
   display: flex;
   gap: 10px;
 }
-
 </style>
-

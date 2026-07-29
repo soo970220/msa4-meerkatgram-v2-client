@@ -1,6 +1,6 @@
 <script setup>
 import { reactive } from "vue";
-import MyButton from "../../components/buttons/MyButton.vue";
+import MyButton from "../../components/button/MyButton.vue";
 import MyInput from "../../components/input/MyInput.vue";
 import MyStrikeThroughBehindWord from "../../components/decoration/MyStrikeThroughBehindWord.vue";
 import { useAuthStore } from "../../store/auth/useAuthStore.js";
@@ -18,6 +18,10 @@ const loginForm = reactive({
   email: "",
   password: "",
 });
+
+const redirectRegistration = () => {
+  router.push("/registration");
+};
 
 const handleSubmit = async () => {
   // 유효성 검사
@@ -69,7 +73,7 @@ const handleSubmit = async () => {
 
     <MyButton
       :btn-type="'submit'"
-      :color="'gray'"
+      :color="'pink'"
       :size="'middle'"
       :content="'Log In'"
     ></MyButton>
@@ -78,9 +82,10 @@ const handleSubmit = async () => {
 
     <MyButton
       :btn-type="'button'"
-      :color="'white'"
+      :color="'lavender'"
       :size="'middle'"
       :content="'Sign Up'"
+      @click="redirectRegistration"
     ></MyButton>
   </form>
 </template>

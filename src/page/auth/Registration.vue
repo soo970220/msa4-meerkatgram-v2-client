@@ -1,6 +1,12 @@
+<!-- 
+description: 
+버전관리 
+ - v1 260610 홍길동 초기작업
+ - v2 260729 둘리 파일 업로드 개선 ... 
+-->
 <script setup>
 import { reactive, ref } from "vue";
-import MyButton from "../../components/buttons/MyButton.vue";
+import MyButton from "../../components/button/MyButton.vue";
 import MyInput from "../../components/input/MyInput.vue";
 import { useFileStore } from "../../store/file/useFileStore.js";
 import { useAuthStore } from "../../store/auth/useAuthStore.js";
@@ -33,7 +39,7 @@ const handleSubmit = async () => {
       registrationData.passwordChk,
     ),
     registrationValidator.nick(registrationData.nick),
-    registrationValidator.profile(registrationData.profile),
+    // registrationValidator.profile(registrationData.profile), // v2 del
   ];
 
   const errorList = validationList.filter((val) => val);
@@ -43,6 +49,14 @@ const handleSubmit = async () => {
   }
 
   try {
+    registrationData.profile = await fileStore.uploadProfile(
+      selectedFile.value,
+    );
+
+    if (!registrationData.profile) {
+      alert("파일 업로드 실패");
+      return;
+    }
     await authStore.registration(registrationData);
     alert("회원가입에 성공했습니다.");
     router.replace("/login");
@@ -67,14 +81,25 @@ const handleChangeProfile = async (e) => {
       // 이전에 미리보기 URL을 만든적이 있다면 기존 URL을 브라우저 메모리에서 해제
       // if 안한다면 사용자가 파일을 계속 변경하면 기존 URL이 메모리에 남아 메모리 누수가 발생할 수 있음
       URL.revokeObjectURL(preview.value);
-    } // API 서버에 파일 저장 요청
-
-    const fileUri = await fileStore.uploadProfile(file); // 선택된 파일을 브라우저에서 임시로 접근할 수 있는 URL로 변환 -> 브라우저 메모리에 생성 -> preview에 저장
-    if (fileUri) {
-      registrationData.profile = fileUri;
-      selectedFile.value = file;
-      preview.value = URL.createObjectURL(file);
     }
+    // ---------------- v2 del start ----------
+    // API 서버에 파일 저장 요청
+    // const fileUri = await fileStore.uploadProfile(file);
+
+    // if (fileUri) {
+    //   registrationData.profile = fileUri;
+
+    //   selectedFile.value = file;
+
+    // 파일 객체를 브라우저에서 임시로 접근할 수 있는 URL로 변환
+    //   preview.value = URL.createObjectURL(file);
+    // }
+    // ---------------v2 del end -----------------
+
+    // ---------------v2 add start -----------------
+    selectedFile.value = file;
+    preview.value = URL.createObjectURL(file);
+    // ---------------v2 add end -----------------
   }
 };
 </script>
