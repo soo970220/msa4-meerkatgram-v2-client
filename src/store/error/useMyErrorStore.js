@@ -27,11 +27,30 @@ export const useMyErrorStore = defineStore("myErrorStore", () => {
     isError.value = false;
   };
 
+  /**
+   * 리다이렉트 처리에서 에러 발생시, 코드와 메세지로 커스텀 에러 객체 생성
+   * @param {String} code
+   * @param {String} messge
+   * @returns Error error
+   */
+  const createErrorRedirection = (code, messge) => {
+    const error = new Error();
+    const response = {
+      data: {
+        code,
+        messge,
+      },
+    };
+    error.response = response;
+    return error;
+  };
+
   return {
     isError,
     errorCode,
     errorMsg,
     setErrorInfo,
     clearErrorInfo,
+    createErrorRedirection,
   };
 });

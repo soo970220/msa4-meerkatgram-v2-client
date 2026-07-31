@@ -41,18 +41,13 @@ const redirectPosts = () => {
 
         <div
           class="bg-image-square redirect-icon-posts-create"
-          style="
-            background-image: url(/icons/plus-sign.png);
-            cursor: pointer;
-          "
+          style="background-image: url(/icons/plus-sign.png); cursor: pointer"
           @click="redirectWrite"
         ></div>
 
         <div
           class="bg-image-square redirect-icon-users-info"
-          style="
-            background-image: url(/icons/free-icon-person-2815428tt.png);
-          "
+          style="background-image: url(/icons/free-icon-person-2815428tt.png)"
         ></div>
       </div>
     </div>
@@ -61,6 +56,10 @@ const redirectPosts = () => {
 </template>
 
 <style scoped>
+.container hr {
+  grid-column: 1 / -1;
+}
+
 .container {
   padding: 10px;
   display: grid;

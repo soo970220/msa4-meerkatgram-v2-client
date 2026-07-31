@@ -71,9 +71,9 @@ onBeforeUnmount(postIndexStore.clearPostIndex);
   </div>
   <MyButton
     v-if="!postIndexStore.isLastPage"
-    :color="'lavender'"
-    :size="'big'"
-    :content="'Show more posts from Kanna_Kamui'"
+    :btnStyle="'lavender'"
+    :btnSize="'big'"
+    :btnContent="'Show more posts from Kanna_Kamui'"
     @click="getNextPage()"
   />
 </template>

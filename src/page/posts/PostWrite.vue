@@ -73,9 +73,9 @@ watch(selectedFile, async () => {
 
     <MyButton
       :btn-type="'submit'"
-      :content="'저장'"
-      :color="'gray'"
-      :size="'middle'"
+      :btnContent="'저장'"
+      :btnStyle="'gray'"
+      :btnSize="'middle'"
     ></MyButton>
   </form>
 </template>

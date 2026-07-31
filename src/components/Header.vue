@@ -35,23 +35,23 @@ const logout = async () => {
       <MyButton
         @click="redirectLogin()"
         v-if="!authStore.isLoggedIn"
-        :content="'Log In'"
-        :color="'pink'"
-        :size="'small'"
+        :btnContent="'Log In'"
+        :btnStyle="'pink'"
+        :btnSize="'small'"
       />
       <MyButton
         v-if="!authStore.isLoggedIn"
-        :content="'Sign Up'"
-        :color="'lavender'"
-        :size="'small'"
+        :btnContent="'Sign Up'"
+        :btnStyle="'lavender'"
+        :btnSize="'small'"
         @click="redirectRegistration"
       />
 
       <MyButton
         v-if="authStore.isLoggedIn"
-        :content="'Logout'"
-        :color="'pink'"
-        :size="'small'"
+        :btnContent="'Logout'"
+        :btnStyle="'pink'"
+        :btnSize="'small'"
         @click="logout"
       />
     </div>

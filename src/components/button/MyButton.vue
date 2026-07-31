@@ -4,15 +4,24 @@ const props = defineProps({
     type: String,
     default: "button",
   }, // 'button', 'submit', reset
-  size: String, // 'big', 'middle', 'small'
-  color: String, // 'black', 'white', 'gray'
-  content: String,
+  btnSize: {
+    type: String,
+    default: "big", // 'big', 'middle', 'small'
+  },
+  btnStyle: {
+    type: String,
+    default: "", // 'black', 'white', 'gray'
+  },
+  btnContent: {
+    type: String,
+    default: "",
+  },
 });
 </script>
 
 <template>
-  <button :type="props.btnType" :class="[props.color, props.size]">
-    {{ props.content }}
+  <button :type="props.btnType" :class="[props.btnStyle, props.btnSize]">
+    {{ props.btnContent }}
   </button>
 </template>
 
@@ -24,6 +33,9 @@ button {
   align-items: center;
   border: none;
   cursor: pointer;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 
 .big {
@@ -65,5 +77,9 @@ button {
   background-color: #eeb7ce;
   border: 2px solid #daced3;
   color: #fcf7f9;
+}
+
+.kakao {
+  background-image: url("/icons/kakao_login_large_narrow.png");
 }
 </style>

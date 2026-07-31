@@ -100,7 +100,7 @@ onBeforeUnmount(postShowStore.clearPostShow);
 .like-icon {
   width: 55px;
   height: 50px;
-  background-image: url("/icons/like_1 2.png");
+  background-image: url("/icons/heart-fill.png");
   background-repeat: no-repeat;
   background-position: center;
   background-size: cover;
